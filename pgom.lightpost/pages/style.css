@@ -1,0 +1,30 @@
+﻿body {
+    margin: 30px;
+    background: #29283b;
+}
+
+body * {
+    font-size: 16px;
+    font-family: 'Iosevka SS04 Web';
+}
+
+.container {
+    width: 90%;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.title {
+    font-size: 30px;
+    color: #fdd877;
+    text-align: center;
+}
+
+.date {
+
+}
+
+.content {
+    color: #ffffff;
+}

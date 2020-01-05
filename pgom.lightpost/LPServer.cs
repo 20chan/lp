@@ -17,6 +17,8 @@ namespace pgom.lightpost {
         private Template postTemplate;
         private static JsonSerializerOptions options;
 
+        private string directoryPath = "pages/";
+
         public LPServer(string dbPath) {
             db = new LiteDatabase(dbPath);
             db.Checkpoint();
@@ -34,8 +36,18 @@ namespace pgom.lightpost {
         }
 
         private void LoadPostTemplate() {
-            var content = File.ReadAllText("pages/post.html", Encoding.UTF8);
+            var content = File.ReadAllText(Path.Combine(directoryPath, "post.html"), Encoding.UTF8);
             postTemplate = Template.Parse(content);
+        }
+
+        [Get("/style.css")]
+        public Response GetCssFile(Request req) {
+            var fullPath = Path.Combine(directoryPath, "style.css");
+            if (!File.Exists(fullPath)) {
+                return new TextResponse("not found", status: StatusCode.NotFound);
+            }
+
+            return new FileResponse(fullPath);
         }
 
         [Get("/posts")]
@@ -98,6 +110,7 @@ namespace pgom.lightpost {
             if (post.Name != (string)req.Query["name"]) {
                 return ErrorResp("post not found", status: StatusCode.NotFound);
             }
+            LoadPostTemplate();
             var content = await postTemplate.RenderAsync(new { Post = post });
             return new HtmlResponse(content);
         }

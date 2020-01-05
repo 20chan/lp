@@ -8,7 +8,7 @@ namespace pgom.lightpost {
             var post = new LPServer("posts.db");
             var statics = new StaticsServer("statics", "index.html");
 
-            var server = new RouteServer();
+            var server = new RouteServer(port: 4001);
             server.AppendRoutes(post, "/lp");
             server.AppendRoutes(statics);
 
