@@ -75,13 +75,28 @@ namespace pgom.lightpost {
         }
 
         [Get("/{id}")]
-        public async Task<Response> GetPage(Request req) {
+        public Response RedirectToPost(Request req) {
             if (!int.TryParse((string)req.Query["id"], out var id)) {
                 return ErrorResp("not valid id format");
             }
             var post = posts.FindById(id);
             if (post == null) {
                 return ErrorResp("post not found");
+            }
+            return new RedirectResponse(StatusCode.MovedPermanently, $"{req.Uri.AbsoluteUri.TrimEnd('/')}/{post.Name}");
+        }
+
+        [Get("/{id}/{name}")]
+        public async Task<Response> GetPostPage(Request req) {
+            if (!int.TryParse((string)req.Query["id"], out var id)) {
+                return ErrorResp("not valid id format");
+            }
+            var post = posts.FindById(id);
+            if (post == null) {
+                return ErrorResp("post not found", status: StatusCode.NotFound);
+            }
+            if (post.Name != (string)req.Query["name"]) {
+                return ErrorResp("post not found", status: StatusCode.NotFound);
             }
             var content = await postTemplate.RenderAsync(new { Post = post });
             return new HtmlResponse(content);
