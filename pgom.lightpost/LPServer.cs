@@ -83,7 +83,7 @@ namespace pgom.lightpost {
             if (post == null) {
                 return ErrorResp("post not found");
             }
-            return new RedirectResponse(StatusCode.MovedPermanently, $"{req.Uri.AbsoluteUri.TrimEnd('/')}/{post.Name}");
+            return new RedirectResponse(StatusCode.Found, $"{req.Uri.AbsoluteUri.TrimEnd('/')}/{post.Name}");
         }
 
         [Get("/{id}/{name}")]
