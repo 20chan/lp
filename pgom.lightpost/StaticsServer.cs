@@ -2,11 +2,11 @@
 using System.IO;
 
 namespace pgom.lightpost {
-    public class FrontEndServer {
+    public class StaticsServer {
         public string DirectoryPath;
         public string Index;
 
-        public FrontEndServer(string path, string index) {
+        public StaticsServer(string path, string index) {
             DirectoryPath = path;
             Index = index;
         }

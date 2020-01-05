@@ -5,16 +5,17 @@ using System.Threading;
 namespace pgom.lightpost {
     class Program {
         static void Main(string[] args) {
-            var post = new LPServer();
-            var frontend = new FrontEndServer("FrontEnd", "index.html");
+            var post = new LPServer("posts.db");
+            var statics = new StaticsServer("statics", "index.html");
 
-            var server = new RouteServer<LPServer>(post);
-            server.AppendRoutes(frontend);
+            var server = new RouteServer();
+            server.AppendRoutes(post, "/lp");
+            server.AppendRoutes(statics);
 
             StartDaemon(server);
         }
 
-        public static void StartDaemon<T>(RouteServer<T> server) {
+        public static void StartDaemon(RouteServer server) {
             var waiter = new ManualResetEvent(false);
             Console.CancelKeyPress += (o, e) => {
                 e.Cancel = true;
