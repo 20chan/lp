@@ -14,7 +14,7 @@ namespace pgom.lightpost {
         private LiteDatabase db;
         private LiteCollection<LitePost> posts;
 
-        private Template postTemplate;
+        private Template indexTemplate, postTemplate;
         private static JsonSerializerOptions options;
 
         private string directoryPath = "pages/";
@@ -23,6 +23,8 @@ namespace pgom.lightpost {
             db = new LiteDatabase(dbPath);
             db.Checkpoint();
             posts = db.GetCollection<LitePost>("posts");
+
+            LoadIndexTemplate();
             LoadPostTemplate();
 
             options = new JsonSerializerOptions {
@@ -33,6 +35,11 @@ namespace pgom.lightpost {
 
         ~LPServer() {
             db.Checkpoint();
+        }
+
+        private void LoadIndexTemplate() {
+            var content = File.ReadAllText(Path.Combine(directoryPath, "index.html"), Encoding.UTF8);
+            indexTemplate = Template.Parse(content);
         }
 
         private void LoadPostTemplate() {
@@ -50,9 +57,17 @@ namespace pgom.lightpost {
             return new FileResponse(fullPath);
         }
 
+        [Get("/")]
+        public async Task<Response> GetIndex(Request req) {
+            // LoadIndexTemplate();
+            var publicPosts = posts.Find(p => p.Public);
+            var content = await indexTemplate.RenderAsync(new { Posts = publicPosts });
+            return new HtmlResponse(content);
+        }
+
         [Get("/posts")]
         public Response GetPosts(Request req) {
-            return new JsonResponse(JsonSerializer.Serialize(posts.FindAll(), options));
+            return new JsonResponse(JsonSerializer.Serialize(posts.Find(p => p.Public), options));
         }
 
         [Post("/posts")]
@@ -92,7 +107,7 @@ namespace pgom.lightpost {
                 return ErrorResp("not valid id format");
             }
             var post = posts.FindById(id);
-            if (post == null) {
+            if (post == null || !post.Public) {
                 return ErrorResp("post not found");
             }
             return new RedirectResponse(StatusCode.Found, $"{req.Uri.AbsoluteUri.TrimEnd('/')}/{post.Name}");
@@ -110,7 +125,7 @@ namespace pgom.lightpost {
             if (post.Name != (string)req.Query["name"]) {
                 return ErrorResp("post not found", status: StatusCode.NotFound);
             }
-            LoadPostTemplate();
+            // LoadPostTemplate();
             var content = await postTemplate.RenderAsync(new { Post = post });
             return new HtmlResponse(content);
         }
