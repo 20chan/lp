@@ -13,7 +13,7 @@
 <body>
     <div class="container">
         <p class="title">{{ post.title }}</p>
-        <p class="date">{{ post.writtenDate }}</p>
+        <p class="date">{{ post.written_date | date.to_string '%Y-%m-%d' }}</p>
         <p class="content">{{ post.content }}</p>
     </div>
 </body>
