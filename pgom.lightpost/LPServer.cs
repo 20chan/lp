@@ -101,7 +101,7 @@ namespace pgom.lightpost {
             }
         }
 
-        [Get("/{id}")]
+        [Get("/{id:int}")]
         public Response RedirectToPost(Request req) {
             if (!int.TryParse((string)req.Query["id"], out var id)) {
                 return ErrorResp("not valid id format");
@@ -113,7 +113,7 @@ namespace pgom.lightpost {
             return new RedirectResponse(StatusCode.Found, $"{req.Uri.AbsoluteUri.TrimEnd('/')}/{post.Name}");
         }
 
-        [Get("/{id}/{name}")]
+        [Get("/{id:int}/{name}")]
         public async Task<Response> GetPostPage(Request req) {
             if (!int.TryParse((string)req.Query["id"], out var id)) {
                 return ErrorResp("not valid id format");
