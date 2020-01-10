@@ -5,6 +5,7 @@
 <head>
     <meta charset="utf-8" />
     <title>lp</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="/fonts/webfont.css">
     <link rel="stylesheet" type="text/css" href="/lp/style.css">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"
@@ -12,12 +13,22 @@
 </head>
 
 <body>
-    {{ for post in posts }}
-    <div>
-        <a href="{{ post.id }}/{{ post.name }}">{{ post.title }}</a>
+    <header>
+        <div class="header">
+            <h1 class="siteTitle">
+                <a href="/lp/">
+                    pgom.lightposts
+                </a>
+            </h1>
+        </div>
+    </header>
+    <div class="container">
+        {{ for post in posts }}
+        <div class="post">
+            <a class="postLink" href="{{ post.id }}/{{ post.name }}"><span class="postDate">[ {{ post.written_date | date.to_string '%Y-%m-%d' }} ]</span> {{ post.title }}</a>
+        </div>
+        {{ end }}
     </div>
-
-    {{ end }}
 </body>
 
 </html>
