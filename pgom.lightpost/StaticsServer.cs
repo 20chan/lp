@@ -15,7 +15,7 @@ namespace pgom.lightpost {
         [Get("/{f0}/{f1}")]
         [Get("/{f0}/{f1}/{f2}")]
         public Response RouteFile(Request req) {
-            var path = req.Uri.AbsolutePath.Substring(1);
+            var path = req.AbsolutePathWithoutBaseUri.Substring(1);
             if (string.IsNullOrEmpty(path)) {
                 path = Index;
             }
