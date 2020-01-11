@@ -60,6 +60,7 @@ a {
 }
 
 .title-area, .name-area {
+    text-align: center;
     margin: 5px auto;
     color: #ccc;
     font-size: 18px;
@@ -74,7 +75,7 @@ a {
     margin: 8px 0;
 }
 
-#title-input, #name-input {
+#title-input, #name-input, #auth {
     background-color: transparent;
     border: none;
     border-bottom: 2px solid #FFF;
@@ -83,6 +84,16 @@ a {
     color: #ccc;
     font-size: 18px;
     width: 60%;
+}
+
+#auth {
+    width: 40%;
+    min-width: 250px;
+}
+
+.auth-area {
+    text-align: center;
+    margin-bottom: 30px;
 }
 
 .CodeMirror {

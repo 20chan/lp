@@ -37,6 +37,9 @@
         <textarea id="editor">
 
         </textarea>
+        <div class="auth-area">
+            <input id="auth">
+        </div>
         <div class="visibility-area">
             <a class="chk active" id="public" href="javascript:changeVisibility(true)">public [x]</a>
             <a class="chk" id="private" href="javascript:changeVisibility(false)">private [ ]</a>
@@ -79,15 +82,19 @@
         changeVisibility(true);
 
         function submit() {
+            var auth = $("#auth").val();
             var name = $("#name-input").val();
             var title = $("#title-input").val();
             var content = mde.value();
 
             var data = {
-                name: name,
-                title: title,
-                content: content,
-                public: isPublic,
+                auth: auth,
+                post: {
+                    name: name,
+                    title: title,
+                    content: content,
+                    public: isPublic,
+                },
             }
 
             $.post("/lp/posts", JSON.stringify(data), resp => {

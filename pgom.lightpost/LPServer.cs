@@ -11,6 +11,8 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace pgom.lightpost {
     public class LPServer {
+        private readonly string auth;
+
         private LiteDatabase db;
         private LiteCollection<LitePost> posts;
 
@@ -19,7 +21,7 @@ namespace pgom.lightpost {
 
         private string directoryPath = "pages/";
 
-        public LPServer(string dbPath) {
+        public LPServer(string dbPath, string auth) {
             db = new LiteDatabase(dbPath);
             db.Checkpoint();
             posts = db.GetCollection<LitePost>("posts");
@@ -31,6 +33,8 @@ namespace pgom.lightpost {
                 PropertyNamingPolicy = new CamelBack(),
                 PropertyNameCaseInsensitive = true,
             };
+
+            this.auth = auth;
         }
 
         ~LPServer() {
@@ -81,9 +85,18 @@ namespace pgom.lightpost {
         }
 
         [Post("/posts")]
-        public async Task<Response> CreatePost(Request req) {
+        public async Task<Response> CreatePost(Request req)  {
             try {
-                var post = await JsonSerializer.DeserializeAsync<LitePost>(req.Body, options);
+                var postReq = await JsonSerializer.DeserializeAsync<AuthPostRequest>(req.Body, options);
+
+                if (!TryAuth(postReq.Auth)) {
+                    return ErrorResp(new JSON {
+                        ["success"] = false,
+                        ["message"] = "auth failed",
+                    }, status: StatusCode.Unauthorized);
+                }
+
+                var post = postReq.Post;
                 post.WrittenDate = DateTime.Now;
 
                 if (string.IsNullOrEmpty(post.Name)) {
@@ -142,6 +155,10 @@ namespace pgom.lightpost {
             return new HtmlResponse(content);
         }
 
+        private bool TryAuth(string auth) {
+            return auth == this.auth;
+        }
+
         private static JsonResponse ErrorResp(string message, Exception ex = null, StatusCode status = StatusCode.BadRequest) {
             return new JsonResponse(new JSON {
                 ["success"] = false,
@@ -160,6 +177,11 @@ namespace pgom.lightpost {
             public override string ConvertName(string name) {
                 return $"{char.ToLower(name[0])}{name.Substring(1)}";
             }
+        }
+
+        class AuthPostRequest {
+            public string Auth { get; set; }
+            public LitePost Post { get; set; }
         }
     }
 }
