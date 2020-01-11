@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>new post</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/lp/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/lp/fonts/webfont.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet"
+          href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.17.1/build/styles/railscasts.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.17.1/build/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/lp/style.css">
+</head>
+<body>
+    <header>
+        <div class="header">
+            <h1 class="siteTitle">
+                <a href="/lp/">
+                    pgom.lightposts
+                </a>
+            </h1>
+        </div>
+    </header>
+    <div class="container">
+        <div class="name-area">
+            <pre class="inline">name:  </pre><input id="name-input">
+        </div>
+        <div class="title-area">
+            <pre class="inline">title: </pre><input id="title-input">
+        </div>
+        <textarea id="editor">
+
+        </textarea>
+        <div class="visibility-area">
+            <a class="chk active" id="public" href="javascript:changeVisibility(true)">public [x]</a>
+            <a class="chk" id="private" href="javascript:changeVisibility(false)">private [ ]</a>
+        </div>
+        <div class="submit-area">
+            <a id="submit" href="javascript:submit()">[submit]</a>
+        </div>
+    </div>
+
+    <script>
+        var mde = new SimpleMDE({
+            element: $("#editor")[0],
+            spellChecker: false,
+            renderingConfig: {
+		        codeSyntaxHighlighting: true,
+	        },
+        });
+
+        mde.value("");
+
+        var publicChk = $("#public");
+        var privateChk = $("#private");
+        isPublic = true;
+
+        function changeVisibility(pub) {
+            isPublic = pub;
+            if (pub) {
+                publicChk.html("public [x]");
+                privateChk.html("private [ ]");
+                publicChk.addClass("active");
+                privateChk.removeClass("active");
+            }
+            else {
+                publicChk.html("public [ ]");
+                privateChk.html("private [x]");
+                publicChk.removeClass("active");
+                privateChk.addClass("active");
+            }
+        }
+        changeVisibility(true);
+
+        function submit() {
+            var name = $("#name-input").val();
+            var title = $("#title-input").val();
+            var content = mde.value();
+
+            var data = {
+                name: name,
+                title: title,
+                content: content,
+                public: isPublic,
+            }
+
+            $.post("/lp/posts", JSON.stringify(data), resp => {
+                if (resp.success) {
+                    window.location.href = `/lp/${resp.id}/${name}`;
+                }
+            });
+        }
+    </script>
+</body>
+</html>

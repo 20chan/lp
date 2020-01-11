@@ -57,6 +57,16 @@ namespace pgom.lightpost {
             return new FileResponse(fullPath);
         }
 
+        [Get("/new")]
+        public Response GetEditor(Request req) {
+            var fullPath = Path.Combine(directoryPath, "editor.html");
+            if (!File.Exists(fullPath)) {
+                return new TextResponse("not found", status: StatusCode.NotFound);
+            }
+
+            return new FileResponse(fullPath);
+        }
+
         [Get("/")]
         public async Task<Response> GetIndex(Request req) {
             // LoadIndexTemplate();

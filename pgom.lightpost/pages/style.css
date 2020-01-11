@@ -58,3 +58,89 @@ a {
     color: #c8c8c8;
     margin-top: 26px;
 }
+
+.title-area, .name-area {
+    margin: 5px auto;
+    color: #ccc;
+    font-size: 18px;
+}
+
+.title-area {
+    margin-bottom: 50px;
+}
+
+.inline {
+    display: inline-block;
+    margin: 8px 0;
+}
+
+#title-input, #name-input {
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid #FFF;
+    display: inline-block;
+    outline: none;
+    color: #ccc;
+    font-size: 18px;
+    width: 60%;
+}
+
+.CodeMirror {
+    background-color: transparent;
+    color: #c8c8c8;
+}
+
+.editor-toolbar a {
+    color: #eee !important;
+}
+
+.CodeMirror-cursor {
+    border-left: 1px solid #fff;
+}
+
+.visibility-area, .submit-area {
+    text-align: center
+}
+
+.chk {
+    color: #65aef7;
+}
+
+.chk:hover {
+    background-color: #ef6487;
+    color: #00303e;
+}
+
+.chk.active {
+    font-weight: bold;
+}
+
+#submit {
+    display: inline-block;
+    padding: 2px;
+    color: #ef6487;
+    cursor: pointer;
+    margin: 5px 0px;
+    font-size: 18px;
+}
+
+#submit:hover {
+    background-color: #65aef7;
+    color: #00303e;
+}
+
+.CodeMirror .CodeMirror-code .cm-comment {
+    background: rgba(0,0,0,.2);
+}
+
+.editor-preview, .editor-preview-side {
+    background-color: #29283b;
+}
+
+.editor-preview pre, .editor-preview-side pre {
+    background: rgba(0,0,0,.2);
+}
+
+.editor-toolbar.disabled-for-preview a:not(.no-disable) {
+    background-color: #666;
+}
