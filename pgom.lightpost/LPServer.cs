@@ -126,7 +126,9 @@ namespace pgom.lightpost {
                 return ErrorResp("post not found", status: StatusCode.NotFound);
             }
             // LoadPostTemplate();
-            var content = await postTemplate.RenderAsync(new { Post = post });
+
+            var rendered = Markdig.Markdown.ToHtml(post.Content);
+            var content = await postTemplate.RenderAsync(new { Post = post, Content = rendered });
             return new HtmlResponse(content);
         }
 

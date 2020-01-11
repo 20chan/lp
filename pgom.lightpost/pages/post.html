@@ -25,7 +25,7 @@
     <div class="container">
         <h2 class="post-title">{{ post.title }}</h2>
         <span class="post-date">{{ post.written_date | date.to_string '%Y-%m-%d' }}</span>
-        <p class="post-content">{{ post.content }}</p>
+        <div class="post-content">{{ content }}</div>
     </div>
 </body>
 </html>
