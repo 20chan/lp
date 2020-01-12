@@ -25,7 +25,9 @@ namespace pgom.lightpost {
                 return new TextResponse("file not found", status: StatusCode.NotFound);
             }
 
-            return new FileResponse(fullPath);
+            var resp = new FileResponse(fullPath);
+            resp.Headers["cache-control"] = "public, max-age=31536000, s-maxage=31536000, immutable";
+            return resp;
         }
     }
 }
