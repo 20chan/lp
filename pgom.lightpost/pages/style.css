@@ -66,6 +66,15 @@ a {
     margin-left: 0px;
 }
 
+.post-content a {
+    color: #ef6487;
+}
+
+.post-content a:hover {
+    background-color: #65aef7;
+    color: #00303e;
+}
+
 .title-area, .name-area {
     text-align: center;
     margin: 5px auto;
