@@ -79,6 +79,13 @@ a {
     color: #00303e;
 }
 
+.post-content code {
+    padding: 0.1em 0.3em;
+    background-color: #232323;
+    color: #e6e1dc;
+    border-radius: 3px;
+}
+
 .title-area, .name-area {
     text-align: center;
     margin: 5px auto;
